@@ -1,16 +1,16 @@
 <?php
 
 use Illuminate\Auth\Middleware\Authenticate;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PesananController;
+use App\Http\Controllers\Api\PelangganController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware(Authenticate::using('sanctum'));
+// Route untuk Pesanan
+Route::get('/pesanan', [PesananController::class, 'index']);
+Route::post('/pesanan', [PesananController::class, 'store']);
+Route::get('/pesanan/{id}', [PesananController::class, 'show']);
+Route::put('/pesanan/{id}', [PesananController::class, 'update']);
+Route::delete('/pesanan/{id}', [PesananController::class, 'destroy']);
 
-use App\Http\Controllers\Api\PesananController;
-Route::resource('pesanans', PesananController::class);
-
-
-//posts
-Route::apiResource('/pelanggans', App\Http\Controllers\Api\PelangganController::class);
+// Route untuk Pelanggan
+Route::apiResource('/pelanggans', PelangganController::class);

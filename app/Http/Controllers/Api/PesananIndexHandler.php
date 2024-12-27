@@ -1,23 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\Handlers;
+namespace App\Http\Controllers\Api;
 
+use App\Models\Pesanan;
 use App\Http\Resources\PesananResource;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class PesananIndexHandler
 {
-    public function handle()
+    public function __invoke(Request $request)
     {
-        try {
-            $pdo = DB::connection()->getPdo();
-            $sql = "SELECT * FROM pesanans ORDER BY id DESC LIMIT 5";
-            $stmt = $pdo->query($sql);
-            $pesanans = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            return new PesananResource(true, 'List Data Pesanan', $pesanans);
-        } catch (\PDOException $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $pesanans = Pesanan::latest()->paginate(5);
+        return new PesananResource(true, 'List Data Pesanan', $pesanans);
     }
 }
